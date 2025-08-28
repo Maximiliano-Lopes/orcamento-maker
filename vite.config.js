@@ -15,6 +15,15 @@ export default defineConfig({
       '.ngrok-free.app',
       '.ngrok.io',
       'ccc76acd0422.ngrok-free.app'
-    ]
+    ],
+    fs: {
+      strict: false
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom']
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   }
 })
