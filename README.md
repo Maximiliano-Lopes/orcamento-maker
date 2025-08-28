@@ -2,12 +2,19 @@
 
 Uma aplicação web moderna para criação e geração de orçamentos em PDF, desenvolvida com React, TypeScript e Vite.
 
+## 🌐 Demonstração
+
+**Acesso online:** [https://maximiliano-lopes.github.io/orcamento-maker/](https://maximiliano-lopes.github.io/orcamento-maker/)
+
 ## Funcionalidades
 
 - ✅ Formulário completo para dados da empresa
 - ✅ Formulário para dados do cliente
 - ✅ Gerenciamento de itens com cálculo automático
 - ✅ Geração de PDF com nome personalizado (Cliente_Data.pdf)
+- ✅ Design responsivo para todos os dispositivos
+- ✅ Logo da empresa integrada no PDF
+- ✅ Deploy automático no GitHub Pages
 - ✅ Interface responsiva e moderna
 - ✅ Navegação por etapas
 - ✅ Salvamento dos dados em JSON
@@ -42,6 +49,36 @@ Uma aplicação web moderna para criação e geração de orçamentos em PDF, de
    ```bash
    npm run preview
    ```
+
+## 🚀 Deploy no GitHub Pages
+
+Este projeto está configurado para deploy automático no GitHub Pages.
+
+### Deploy Automático (Recomendado)
+
+1. Faça push para a branch `master`:
+```bash
+git add .
+git commit -m "feat: deploy to github pages"
+git push origin master
+```
+
+2. O GitHub Actions automaticamente fará o build e deploy
+
+### Deploy Manual
+
+```bash
+npm run deploy
+```
+
+### Configuração do GitHub Pages
+
+1. No seu repositório, vá em **Settings** > **Pages**
+2. Em **Source**, selecione "Deploy from a branch"
+3. Selecione a branch `gh-pages` e pasta `/ (root)`
+4. Clique em **Save**
+
+O projeto estará disponível em: `https://seu-usuario.github.io/orcamento-maker/`
 
 ## Estrutura do Projeto
 
