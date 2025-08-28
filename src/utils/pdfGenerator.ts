@@ -33,14 +33,19 @@ export const generatePDF = async (budgetData: BudgetData) => {
     // Converter logo para base64 e adicionar ao PDF centralizado
     const logoBase64 = await getImageBase64(logoRefrigeracao);
     
-    // Calcular dimensões mantendo proporção (assumindo logo original ~200x100px)
-    const maxWidth = 60;
-    const maxHeight = 30;
-    const aspectRatio = 2; // largura/altura aproximada do logo
+    // Calcular dimensões mantendo proporção real da logo (1330x365px)
+    const originalWidth = 1330;
+    const originalHeight = 365;
+    const aspectRatio = originalWidth / originalHeight; // ~3.64
+    
+    // Definir tamanho máximo para o PDF
+    const maxWidth = 80;
+    const maxHeight = 25;
     
     let logoWidth = maxWidth;
     let logoHeight = maxWidth / aspectRatio;
     
+    // Se a altura calculada for maior que o máximo, ajustar pela altura
     if (logoHeight > maxHeight) {
       logoHeight = maxHeight;
       logoWidth = maxHeight * aspectRatio;
