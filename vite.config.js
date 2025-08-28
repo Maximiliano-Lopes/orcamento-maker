@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/orcamento-maker/',
+  build: {
+    assetsDir: 'assets',
+  },
   server: {
     host: true,
     allowedHosts: [
