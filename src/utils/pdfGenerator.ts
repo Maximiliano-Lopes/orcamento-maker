@@ -2,6 +2,36 @@ import jsPDF from 'jspdf';
 import { BudgetData } from '../types/budget';
 import logoRefrigeracao from '../assets/logo_refrigeração.png';
 
+// Função auxiliar para quebrar texto em múltiplas linhas
+const wrapText = (text: string, maxWidth: number, doc: jsPDF): string[] => {
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+
+  words.forEach(word => {
+    const testLine = currentLine + (currentLine ? ' ' : '') + word;
+    const textWidth = doc.getTextWidth(testLine);
+    
+    if (textWidth <= maxWidth) {
+      currentLine = testLine;
+    } else {
+      if (currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        // Palavra muito longa, força quebra
+        lines.push(word);
+      }
+    }
+  });
+  
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+  
+  return lines;
+};
+
 // Função auxiliar para converter imagem para base64
 const getImageBase64 = (url: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -159,22 +189,61 @@ export const generatePDF = async (budgetData: BudgetData) => {
   // Items
   pdf.setFont('helvetica', 'normal');
   budgetData.items.forEach((item, index) => {
-    if (yPosition > 250) {
+    if (yPosition > 240) {
       pdf.addPage();
       yPosition = 20;
     }
     
+    // Quebrar texto da descrição em múltiplas linhas
+    const maxDescriptionWidth = 90; // largura máxima para descrição
+    const descriptionLines = wrapText(item.description, maxDescriptionWidth, pdf);
+    
+    // Quebrar texto da descrição detalhada se existir
+    let detailedLines: string[] = [];
+    if (item.detailedDescription && item.detailedDescription.trim()) {
+      detailedLines = wrapText(item.detailedDescription, maxDescriptionWidth, pdf);
+    }
+    
+    // Calcular altura total do item
+    const totalDescriptionLines = descriptionLines.length + detailedLines.length;
+    const itemHeight = Math.max(12, totalDescriptionLines * 4 + 8);
+    
     // Alternate row background
     if (index % 2 === 0) {
       pdf.setFillColor(250, 250, 250);
-      pdf.rect(20, yPosition - 3, pageWidth - 40, 10, 'F');
+      pdf.rect(20, yPosition - 3, pageWidth - 40, itemHeight, 'F');
     }
     
-    pdf.text(item.description, 25, yPosition + 2);
-    pdf.text(item.quantity.toString(), 120, yPosition + 2);
-    pdf.text(`R$ ${item.unitPrice.toFixed(2)}`, 140, yPosition + 2);
-    pdf.text(`R$ ${item.total.toFixed(2)}`, 170, yPosition + 2);
-    yPosition += 10;
+    let currentLineY = yPosition + 2;
+    
+    // Renderizar descrição principal
+    pdf.setFont('helvetica', 'bold');
+    descriptionLines.forEach((line, lineIndex) => {
+      pdf.text(line, 25, currentLineY + (lineIndex * 4));
+    });
+    currentLineY += descriptionLines.length * 4;
+    
+    // Renderizar descrição detalhada se existir
+    if (detailedLines.length > 0) {
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(100, 100, 100);
+      detailedLines.forEach((line, lineIndex) => {
+        pdf.text(line, 25, currentLineY + (lineIndex * 4));
+      });
+      currentLineY += detailedLines.length * 4;
+      pdf.setFontSize(10);
+      pdf.setTextColor(0, 0, 0);
+    }
+    
+    // Centralizar verticalmente os outros campos
+    const centerY = yPosition + (itemHeight / 2);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(item.quantity.toString(), 120, centerY);
+    pdf.text(`R$ ${item.unitPrice.toFixed(2)}`, 140, centerY);
+    pdf.text(`R$ ${item.total.toFixed(2)}`, 170, centerY);
+    
+    yPosition += itemHeight;
   });
 
   // Total

@@ -330,6 +330,24 @@ body {
   font-size: 0.9rem;
 }
 
+.detailed-description {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  resize: vertical;
+  min-height: 40px;
+  font-family: inherit;
+}
+
+.description-detail-label {
+  margin-top: 0.5rem !important;
+  font-size: 0.8rem;
+  color: #666;
+}
+
 .item-total {
   font-weight: 600;
   color: #4caf50;

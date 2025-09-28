@@ -23,6 +23,7 @@ export interface ClientData {
 export interface Item {
   id: string;
   description: string;
+  detailedDescription?: string;
   quantity: number;
   unitPrice: number;
   total: number;

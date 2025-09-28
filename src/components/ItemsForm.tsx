@@ -54,6 +54,14 @@ export const ItemsForm: React.FC<ItemsFormProps> = ({
                     onChange={(e) => onUpdateItem(item.id, 'description', e.target.value)}
                     placeholder="Descrição do item"
                   />
+                  <label className="mobile-label description-detail-label">Descrição Detalhada (Opcional):</label>
+                  <textarea
+                    value={item.detailedDescription || ''}
+                    onChange={(e) => onUpdateItem(item.id, 'detailedDescription', e.target.value)}
+                    placeholder="Descrição adicional do produto/serviço..."
+                    className="detailed-description"
+                    rows={2}
+                  />
                 </div>
                 
                 <div className="item-quantity">
